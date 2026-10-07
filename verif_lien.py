@@ -29,7 +29,6 @@ class LinkCheckerApp:
 
         self.is_running = False
 
-        # --- Haut : Entrée URL et boutons ---
         top_frame = tk.Frame(root, padx=10, pady=10)
         top_frame.pack(fill=tk.X)
 
@@ -45,19 +44,16 @@ class LinkCheckerApp:
         self.btn_stop = tk.Button(top_frame, text="Arrêter", bg="#c0392b", fg="white", font=("Arial", 10, "bold"), state=tk.DISABLED, command=self.stop_analysis)
         self.btn_stop.pack(side=tk.LEFT, padx=5)
 
-        # --- Bas : Grille avec les deux cadres (Logs et Erreurs) ---
         grid_frame = tk.Frame(root, padx=10, pady=10)
         grid_frame.pack(fill=tk.BOTH, expand=True)
         grid_frame.columnconfigure(0, weight=1)
         grid_frame.columnconfigure(1, weight=1)
         grid_frame.rowconfigure(1, weight=1)
 
-        # Cadre gauche : Roulement (Logs)
         tk.Label(grid_frame, text="Roulement du site (Logs en direct)", font=("Arial", 11, "bold"), fg="#34495e").grid(row=0, column=0, sticky="w", pady=5)
         self.log_box = scrolledtext.ScrolledText(grid_frame, bg="#1e1e1e", fg="#00ff66", font=("Courier", 10))
         self.log_box.grid(row=1, column=0, sticky="nsew", padx=(0, 5))
 
-        # Cadre droite : Rapport d'erreurs
         tk.Label(grid_frame, text="Rapport des erreurs (Liens cassés)", font=("Arial", 11, "bold"), fg="#c0392b").grid(row=0, column=1, sticky="w", pady=5)
         self.report_box = scrolledtext.ScrolledText(grid_frame, bg="#1e1e1e", fg="#ff6b6b", font=("Courier", 10))
         self.report_box.grid(row=1, column=1, sticky="nsew", padx=(5, 0))
@@ -103,7 +99,6 @@ class LinkCheckerApp:
 
     def check_url_status(self, url):
         status_code = 0
-        # En-têtes complets pour imiter un navigateur réel
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
@@ -129,7 +124,10 @@ class LinkCheckerApp:
         visited = set()
         checked_external = set()
         queue = [base_url]
-        delay = 0
+        # Délai en secondes entre chaque requête. Mettre une valeur (ex: 0.5 ou 1) 
+        # permet de temporiser et d'éviter les connexions trop rapides (anti-flood/anti-spam),
+        # ce qui prévient le blocage temporaire ou permanent de votre adresse IP par le serveur.
+        delay = 0 # 
 
         self.log(f"Début de l'analyse globale pour : {base_url}\n")
 
